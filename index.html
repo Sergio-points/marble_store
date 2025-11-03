@@ -1,2 +1,195 @@
-marble_store/
-├── index.html   ✅
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mármol del Sur - Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        header { background-color: #333; color: white; padding: 10px; text-align: center; }
+        nav { background-color: #444; padding: 10px; }
+        nav button { color: white; margin: 0 15px; background: none; border: none; cursor: pointer; font-size: 16px; }
+        nav button.active { text-decoration: underline; }
+        .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .section { display: none; background-color: white; padding: 20px; border: 1px solid #ddd; margin-bottom: 20px; }
+        .section.active { display: block; }
+        .dashboard-container { display: flex; }
+        .sidebar { width: 20%; background-color: #f9f9f9; padding: 20px; margin-right: 20px; }
+        .main { width: 80%; }
+        .placeholder-img { width: 100%; height: 200px; background-color: #eee; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .product { background-color: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; }
+        .status-pending { color: orange; }
+        .status-shipped { color: green; }
+        .status-active { color: green; }
+        .status-inactive { color: red; }
+        .chat-container { display: flex; height: calc(100vh - 200px); }
+        .chat-sidebar { width: 25%; background-color: #f9f9f9; padding: 20px; border-right: 1px solid #ddd; overflow-y: auto; }
+        .chat-main { width: 75%; display: flex; flex-direction: column; }
+        .conversation { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .conversation:hover { background-color: #eee; }
+        .chat-header { padding: 10px; border-bottom: 1px solid #ddd; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 10px; border-bottom: 1px solid #ddd; }
+        .message { margin-bottom: 10px; }
+        .message.client { text-align: right; color: #007bff; }
+        .message.staff { text-align: left; color: #28a745; }
+        .input-area { padding: 10px; display: flex; }
+        .input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; }
+        .input-area button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        footer { background-color: #333; color: white; text-align: center; padding: 10px; margin-top: 40px; position: fixed; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mármol del Sur</h1>
+    </header>
+    <nav>
+        <button onclick="showSection('dashboard')" class="active">Dashboard</button>
+        <button onclick="showSection('products')">Productos</button>
+        <button onclick="showSection('orders')">Pedidos</button>
+        <button onclick="showSection('clients')">Clientes</button>
+        <button onclick="showSection('chat')">Chat</button>
+    </nav>
+    <div class="container">
+        <div id="dashboard" class="section active">
+            <div class="dashboard-container">
+                <aside class="sidebar">
+                    <h3>Producción</h3>
+                    <div class="placeholder-img">Imagen de Producción</div>
+                    <p>Estadísticas de producción: 500m² procesados hoy.</p>
+                </aside>
+                <main class="main">
+                    <h2>Dashboard</h2>
+                    <div>
+                        <h3>Destinos</h3>
+                        <div class="placeholder-img">Mapa de Destinos</div>
+                        <p>Envíos a: Madrid, Barcelona, etc.</p>
+                    </div>
+                    <div>
+                        <h3>Estadísticas</h3>
+                        <p>Ventas: $50,000</p>
+                        <p>Pedidos Pendientes: 10</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div id="products" class="section">
+            <h2>Productos</h2>
+            <div class="product-grid">
+                <div class="product"><div class="placeholder-img">Mármol Blanco Carrara</div><h3>Mármol Blanco Carrara</h3><p>Calidad premium. Precio: $50/m²</p></div>
+                <div class="product"><div class="placeholder-img">Mármol Negro Marquina</div><h3>Mármol Negro Marquina</h3><p>Elegante y resistente. Precio: $60/m²</p></div>
+                <div class="product"><div class="placeholder-img">Mármol Emperador</div><h3>Mármol Emperador</h3><p>Tonos marrones cálidos. Precio: $45/m²</p></div>
+                <div class="product"><div class="placeholder-img">Granito Absoluto Black</div><h3>Granito Absoluto Black</h3><p>Duradero. Precio: $55/m²</p></div>
+            </div>
+        </div>
+
+        <div id="orders" class="section">
+            <h2>Pedidos</h2>
+            <table>
+                <thead><tr><th>ID</th><th>Cliente</th><th>Producto</th><th>Cantidad</th><th>Monto</th><th>Estado</th></tr></thead>
+                <tbody>
+                    <tr><td>#001</td><td>Cliente #87</td><td>Mármol Negro Marquina</td><td>5m²</td><td>$300</td><td class="status-pending">Pendiente</td></tr>
+                    <tr><td>#002</td><td>Cliente #88</td><td>Mármol Blanco Carrara</td><td>10m²</td><td>$500</td><td class="status-shipped">Enviado</td></tr>
+                    <tr><td>#003</td><td>Cliente #89</td><td>Granito Absoluto Black</td><td>3m²</td><td>$165</td><td class="status-pending">Pendiente</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="clients" class="section">
+            <h2>Clientes</h2>
+            <table>
+                <thead><tr><th>ID</th><th>Nombre</th><th>Contacto</th><th>Último Pedido</th><th>Estado</th></tr></thead>
+                <tbody>
+                    <tr><td>#87</td><td>Eva García</td><td>eva@email.com</td><td>#001 - Mármol Negro</td><td class="status-active">Activo</td></tr>
+                    <tr><td>#88</td><td>Carlos López</td><td>carlos@email.com</td><td>#002 - Mármol Blanco</td><td class="status-active">Activo</td></tr>
+                    <tr><td>#89</td><td>María Ruiz</td><td>maria@email.com</td><td>#003 - Granito Black</td><td class="status-active">Activo</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="chat" class="section">
+            <div class="chat-container">
+                <aside class="chat-sidebar">
+                    <h3>Conversaciones con Clientes</h3>
+                    <div class="conversation" onclick="selectConversation(87)"><strong>Cliente #87</strong><br><small>Hola, ¿tienes una encimera negra?</small></div>
+                    <div class="conversation" onclick="selectConversation(88)"><strong>Cliente #88</strong><br><small>¿Cuántos metros fabricas?</small></div>
+                    <div class="conversation" onclick="selectConversation(89)"><strong>Cliente #89</strong><br><small>¿Envío a Madrid?</small></div>
+                </aside>
+                <main class="chat-main">
+                    <div id="chat-header" class="chat-header"><h3 id="current-client">Selecciona una conversación</h3></div>
+                    <div id="chat-messages" class="chat-messages"></div>
+                    <div class="input-area">
+                        <input type="text" id="message-input" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
+                        <button onclick="sendMessage()">Enviar</button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2025 Mármol del Sur</footer>
+
+    <script>
+        let currentClient = null;
+        const simulatedChats = {
+            87: [
+                { user: 'Cliente #87', msg: 'Hola, ¿tienes una encimera negra?', type: 'client' },
+                { user: 'Staff', msg: '¡Sí! Tenemos mármol negro Marquina disponible.', type: 'staff' }
+            ],
+            88: [
+                { user: 'Cliente #88', msg: '¿Cuántos metros puedes fabricar por semana?', type: 'client' },
+                { user: 'Staff', msg: 'Podemos fabricar hasta 100 m² semanales.', type: 'staff' }
+            ],
+            89: [
+                { user: 'Cliente #89', msg: '¿Hacen envío a Madrid capital?', type: 'client' },
+                { user: 'Staff', msg: 'Sí, en 3 a 5 días hábiles.', type: 'staff' }
+            ]
+        };
+
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function selectConversation(clientId) {
+            currentClient = clientId;
+            document.getElementById('current-client').innerText = `Chat con Cliente #${clientId}`;
+            const chatBox = document.getElementById('chat-messages');
+            chatBox.innerHTML = '';
+            simulatedChats[clientId].forEach(msg => displayMessage(msg.user, msg.msg, msg.type));
+        }
+
+        function displayMessage(user, msg, type) {
+            const box = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerHTML = `<strong>${user}:</strong> ${msg}`;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (!text || !currentClient) return;
+            displayMessage('Tú', text, 'client');
+            input.value = '';
+            // respuesta automática simulada
+            setTimeout(() => {
+                const reply = { 87: "Claro, te puedo enviar una foto del modelo.",
+                                88: "Podemos entregar en una semana.",
+                                89: "Sí, el envío cuesta 50€." }[currentClient];
+                displayMessage('Staff', reply, 'staff');
+            }, 1000);
+        }
+
+        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+    </script>
+</body>
+</html>
